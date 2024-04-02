@@ -32,7 +32,7 @@ before_fastqc){
 
 before_metrics){
  resources: -c 1 -t 0-01:00:00 -m 50
- . ~soft_bio_267/initializes/init_ruby
+ source ~soft_bio_267/initializes/init_ruby
  echo [cpu]
  ?
  get_fastqc_data.rb -i before_fastqc)"/"$sample"_S*_L00"$lane_num"_R1_001_fastqc.zip" -T -H | awk '{print "$sample" "_L00" "$lane_num" "_R1" "\tinitial_" $0 }' >> $experiment_folder"/metrics"
