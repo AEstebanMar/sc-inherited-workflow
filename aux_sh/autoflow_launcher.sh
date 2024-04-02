@@ -1,21 +1,20 @@
-# Sergio Alías, 20230516
-# Last modified 20231212
+#! /usr/bin/env bash
 
-# Generic Autoflow launcher
 
-. ~soft_bio_267/initializes/init_autoflow
-
+source ~soft_bio_267/initializes/init_autoflow
+project_dir=`pwd`
+autoflow_dir=$project_dir/AutoFlow
+results_dir=$project_dir/results
 
 if [ "$1" == "count" ] ; then # STAGE 1 OBTAINING COUNTS FROM FASTQ FILES
-    export TEMPLATE=$COUNT_TEMPLATE
-    export RESULTS_FOLDER=$COUNT_RESULTS_FOLDER
+    TEMPLATE=$autoflow_dir/count_template.af
+    RESULTS_FOLDER=$results_dir/counts
 elif [ "$1" == "qc" ] ; then # STAGE 2 QUALITY CONTROL AND TRIMMING
-    export TEMPLATE=$QC_TEMPLATE
-    export RESULTS_FOLDER=$QC_RESULTS_FOLDER
+    TEMPLATE=$autoflow_dir/QC_template.txt
+    RESULTS_FOLDER=$results_dir/QC
 elif [ "$1" == "preproc" ] ; then # STAGE 3a PREPROCESSING  
-    export TEMPLATE=$PREPROC_TEMPLATE
-    export RESULTS_FOLDER=$PREPROC_RESULTS_FOLDER
-
+    TEMPLATE=$autoflow_dir/preprocessing_template.af
+    RESULTS_FOLDER=$results_dir/preprocessing
 fi
 
 mkdir -p $RESULTS_FOLDER
@@ -32,7 +31,7 @@ fi
 PATH=$LAB_SCRIPTS:$PATH
 
 while IFS= read sample; do
-    total_fastq_files=$(ls $read_path -1 | grep $sample | wc -l)
+    total_fastq_files=$(ls $project_dir/raw_data -1 | grep -c $sample)
     number_of_lanes=$((total_fastq_files / 2))
     for (( i = 1; i <= $number_of_lanes; i++ )) ; do
         AF_VARS=`echo "
@@ -42,4 +41,4 @@ while IFS= read sample; do
         AutoFlow -w $TEMPLATE -V "$AF_VARS" -o $RESULTS_FOLDER/$sample #$RESOURCES
     done
     S_NUMBER=$(( S_NUMBER + 1 ))
-done < $SAMPLES_FILE
+done < $project_dir/samples_to_process
