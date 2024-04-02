@@ -1,21 +1,12 @@
 #! /usr/bin/env bash
 
-# Sergio Alías, 20230323
-# Last modified 20230711
 
-# daemon.sh
-
-# Script for controlling the single-cell Cell Ranger workflow
-
-
-framework_dir=`dirname $0`
-export CODE_PATH=$(readlink -f $framework_dir )
-CONFIG_DAEMON=$CODE_PATH'/config_daemon'
-export module=$1 # For setting global vars from config_daemon according to the stage
-source $CONFIG_DAEMON
-export PATH=$CODE_PATH'/reports:'$PATH
-export PATH=$CODE_PATH'/scripts:'$PATH
-export PATH=$CODE_PATH'/aux_sh:'$PATH
+project_dir=`pwd`
+module=$1
+source $project_dir/config_daemon
+export PATH=$project_dir/reports:$PATH
+export PATH=$project_dir/scripts:$PATH
+export PATH=$project_dir/aux_sh:$PATH
 
 
 ## STAGE EXECUTION
