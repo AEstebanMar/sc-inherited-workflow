@@ -8,7 +8,7 @@
 # Script for creating soft links for the input files
 # Adapted from seoanezonjic/DEG_workflow/manage_input_files_example.sh 
 
-source_folder=/mnt2/fscratch/users/bio_267_uma/sergioalias/all_LUADs
+source_folder=/mnt2/fscratch/users/bio_267_uma/aestebanm/sc_test_data/download/
 output_folder=`pwd`'/raw_data'
 
 
