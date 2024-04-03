@@ -3,7 +3,6 @@
 
 project_dir=`pwd`
 module=$1
-source $project_dir/config_daemon
 export PATH=$project_dir/reports:$PATH
 export PATH=$project_dir/scripts:$PATH
 export PATH=$project_dir/aux_sh:$PATH
