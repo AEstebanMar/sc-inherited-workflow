@@ -41,7 +41,8 @@ while IFS= read sample; do
         variables=`echo "
         \\$sample=$sample,
         \\$lane_num=$i,
-        \\$count_transcriptome=$ref_dir
+        \\$count_transcriptome=$ref_dir,
+        \\$read_path=$project_dir/raw_data
         " | tr -d [:space:]`
         AutoFlow -w $TEMPLATE -V $variables -o $RESULTS_FOLDER/$sample -L $aux_opt -e -n $constraint -t 00-00:59:59
     done
