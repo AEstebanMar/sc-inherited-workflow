@@ -9,5 +9,4 @@ run_count){
                   --fastqs=$read_path \
                   --localcores=[cpu] \
                   --localmem=50
- find -name "possorted_genome_bam.bam" -exec rm {} \;
 }
