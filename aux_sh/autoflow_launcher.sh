@@ -14,7 +14,7 @@ if [ "$1" == "count" ] ; then # STAGE 1 OBTAINING COUNTS FROM FASTQ FILES
     TEMPLATE=$autoflow_dir/count_template.af
     RESULTS_FOLDER=$results_dir/counts
 elif [ "$1" == "qc" ] ; then # STAGE 2 QUALITY CONTROL AND TRIMMING
-    TEMPLATE=$autoflow_dir/QC_template.txt
+    TEMPLATE=$autoflow_dir/QC_template.af
     RESULTS_FOLDER=$results_dir/QC
 elif [ "$1" == "preproc" ] ; then # STAGE 3a PREPROCESSING  
     TEMPLATE=$autoflow_dir/preprocessing_template.af
