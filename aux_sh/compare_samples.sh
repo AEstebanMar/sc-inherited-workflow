@@ -17,14 +17,15 @@
 
 hostname
 
-mkdir -p $report_folder
-
+project_dir=`pwd`
+experiment_name=`grep experiment_name $project_dir/config_daemon | cut -f 2 -d " "`
+mkdir -p $project_dir/report
 
 ## TODO fix code below
 
 while IFS= read -r name; do
-  if [ -d "$COUNT_RESULTS_FOLDER/$name" ]; then
-    input_file="$COUNT_RESULTS_FOLDER/$name/cellranger_0000/$name/outs/metrics_summary.csv"
+  if [ -d "$project_dir/results/counts/$name" ]; then
+    input_file="$project_dir/results/counts/$name/cellranger_0000/$name/outs/metrics_summary.csv"
     cat $input_file | perl -pe 's/(\d),(\d)/$1$2/g'| sed '1 s/ /_/g' | sed 's/%//g' | sed 's/"//g' | sed 's/ /\n/g' | sed 's/,/\t/g' | awk '
 { 
     for (i=1; i<=NF; i++)  {
@@ -40,21 +41,21 @@ END {
         }
         print str
     }
-}' | awk -v var="$name" 'BEGIN {FS=OFS="\t"} {print var, $0}' | sed 's/ /\t/g' >> $experiment_folder'/cellranger_metrics'
+}' | awk -v var="$name" 'BEGIN {FS=OFS="\t"} {print var, $0}' | sed 's/ /\t/g' >> $project_dir'/cellranger_metrics'
   fi
-done < $SAMPLES_FILE
+done < $project_dir/samples_to_process
 
 
 . ~soft_bio_267/initializes/init_ruby
 . ~soft_bio_267/initializes/init_R
-create_metric_table.rb $experiment_folder'/metrics' sample $experiment_folder'/metric_table'
-create_metric_table.rb $experiment_folder'/cellranger_metrics' sample $experiment_folder'/cellranger_metric_table'
+create_metric_table.rb $project_dir'/metrics' sample $project_dir'/metric_table'
+create_metric_table.rb $project_dir'/cellranger_metrics' sample $project_dir'/cellranger_metric_table'
 
 # Main
 
-/usr/bin/time $CODE_PATH/scripts/compare_samples.R -o $report_folder \
-                                                   -m $experiment_folder'/metric_table' \
-                                                   -l $experiment_folder'/metrics' \
+/usr/bin/time $project_dir/scripts/compare_samples.R -o $report_folder \
+                                                   -m $project_dir'/metric_table' \
+                                                   -l $project_dir'/metrics' \
                                                    -e $experiment_name \
-                                                   --cellranger_metrics $experiment_folder'/cellranger_metric_table' \
-                                                   --cellranger_long_metrics $experiment_folder'/cellranger_metrics'
+                                                   --cellranger_metrics $project_dir'/cellranger_metric_table' \
+                                                   --cellranger_long_metrics $project_dir'/cellranger_metrics'
