@@ -9,9 +9,11 @@
  resources: -c 5 -t 2-00:00:00 -m '30gb'
  module unload java
  source ~soft_bio_267/initializes/init_stbb  
+ fastq_1=`find $read_path -name $sample"_S*_L00"$lane_num"_R1_001.fastq.gz"`
+ fastq_2=`find $read_path -name $sample"_S*_L00"$lane_num"_R2_001.fastq.gz"`
  ?
  seqtrimbb -t $TRIM_TEMPLATE \
-           -Q $read_path"/"$sample"_S*_L00"$lane_num"_R1_001.fastq.gz,"$read_path"/"$sample"_S*_L00"$lane_num"_R2_001.fastq.gz" \
+           -Q $fastq_1, $fastq_2 \
            -P "minlength=65" \
            -w [cpu] \
            --full_throttle \
@@ -22,9 +24,11 @@
 before_fastqc){
  resources: -c 2 -t 2-00:00:00 -m '30gb'
  module load fastqc/0.11.9
+ fastq_1=`find $read_path -name $sample"_S*_L00"$lane_num"_R1_001.fastq.gz"`
+ fastq_2=`find $read_path -name $sample"_S*_L00"$lane_num"_R2_001.fastq.gz"`
  ?
  fastqc --noextract \
-        $read_path"/"$sample"_S*_L00"$lane_num"_R1_001.fastq.gz" $read_path"/"$sample"_S*_L00"$lane_num"_R2_001.fastq.gz" \
+        $fastq_1 $fastq_2 \
         -o . \ # $QC_RESULTS_FOLDER/$sample
         -t [cpu]
 }
@@ -35,6 +39,6 @@ before_metrics){
  source ~soft_bio_267/initializes/init_ruby
  echo [cpu]
  ?
- get_fastqc_data.rb -i before_fastqc)"/"$sample"_S*_L00"$lane_num"_R1_001_fastqc.zip" -T -H | awk '{print "$sample" "_L00" "$lane_num" "_R1" "\tinitial_" $0 }' >> $experiment_folder"/metrics"
- get_fastqc_data.rb -i before_fastqc)"/"$sample"_S"*_L00"$lane_num"_R2_001_fastqc.zip" -T -H | awk '{print "$sample" "_L00" "$lane_num" "_R2" "\tinitial_" $0 }' >> $experiment_folder"/metrics"
+ get_fastqc_data.rb -i before_fastqc)/*_R1_001_fastqc.zip" -T -H | awk '{print "$sample" "_L00" "$lane_num" "_R1" "\tinitial_" $0 }' > $project_dir"/metrics"
+ get_fastqc_data.rb -i before_fastqc)/*_R2_001_fastqc.zip" -T -H | awk '{print "$sample" "_L00" "$lane_num" "_R2" "\tinitial_" $0 }' >> $project_dir"/metrics"
 }
