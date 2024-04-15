@@ -19,8 +19,7 @@ library(optparse)
 ### Custom libs ###
 ###################
 
-root_path <- Sys.getenv("CODE_PATH") # daemon
-source(file.path(root_path, "R", "qc_library.R"))
+source("~aestebanm/projects/sc-inherited-workflow/R/qc_library.R")
 
 
 ############
