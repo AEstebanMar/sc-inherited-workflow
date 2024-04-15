@@ -18,22 +18,26 @@
 hostname
 
 module load qualimap
+project_dir=`pwd`
+mkdir -p $project_dir/report
+mkdir -p $project_dir/QMAP_RESULTS
 
-mkdir -p $QMAP_RESULTS_FOLDER
+cd $project_dir/QMAP_RESULTS
 
-cd $QMAP_RESULTS_FOLDER
+rm $project_dir/QMAP_RESULTS"/qualimap_input_data"
+touch $project_dir/QMAP_RESULTS"/qualimap_input_data"
 
 while IFS= read -r name; do
-  if [ -d "$COUNT_RESULTS_FOLDER/$name" ]; then
-    echo -e "$name\t$COUNT_RESULTS_FOLDER/$name/cellranger_0000/$name/outs/possorted_genome_bam.bam" >> $QMAP_RESULTS_FOLDER"/qualimap_input_data"
+  if [ -d "$project_dir/results/counts/$name" ]; then
+    echo -e "$name\t$project_dir/results/counts/$name/cellranger_0000/$name/outs/possorted_genome_bam.bam" >> $project_dir/QMAP_RESULTS"/qualimap_input_data"
   fi
-done < $SAMPLES_FILE
+done < $project_dir/samples_to_process
 
 unset DISPLAY
 
 # Main
 
 /usr/bin/time qualimap multi-bamqc --run-bamqc \
-                                   -d $QMAP_RESULTS_FOLDER"/qualimap_input_data" \
-                                   -outdir $QMAP_RESULTS_FOLDER
+                                   -d $project_dir/QMAP_RESULTS/qualimap_input_data \
+                                   -outdir $project_dir/QMAP_RESULTS
  
