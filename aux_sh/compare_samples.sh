@@ -19,7 +19,8 @@ hostname
 
 project_dir=`pwd`
 experiment_name=`grep experiment_name $project_dir/config_daemon | cut -f 2 -d " "`
-mkdir -p $project_dir/report
+report_folder=$project_dir/report
+mkdir -p $report_folder
 
 ## TODO fix code below
 
@@ -58,4 +59,5 @@ create_metric_table.rb $project_dir'/cellranger_metrics' sample $project_dir'/ce
                                                    -l $project_dir'/metrics' \
                                                    -e $experiment_name \
                                                    --cellranger_metrics $project_dir'/cellranger_metric_table' \
-                                                   --cellranger_long_metrics $project_dir'/cellranger_metrics'
+                                                   --cellranger_long_metrics $project_dir'/cellranger_metrics' \
+                                                   --template $project_dir/templates/fastqc_report.Rmd
