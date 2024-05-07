@@ -1,12 +1,12 @@
 
 sc_preprocessing){
  resources: -c 2 -t 2-00:00:00 -m '150gb'
- mkdir -p $RESULTS_FOLDER
+ mkdir -p $project_dir/results
  source ~soft_bio_267/initializes/init_R 
  echo [cpu]
  ?
- preprocessing.R --input $COUNT_RESULTS_FOLDER"/"$sample"/cellranger_0000/"$sample"/outs" \
-                 --output $RESULTS_FOLDER \
+ preprocessing.R --input $project_dir/results/$sample/cellranger_0000/$sample/outs \
+                 --output $project_dir/results \
                  --name $sample \
                  --filter $preproc_filter \
                  --mincells $preproc_init_min_cells \
@@ -18,7 +18,9 @@ sc_preprocessing){
                  --hvgs $preproc_select_hvgs \
                  --ndims $preproc_pca_n_dims \
                  --dimheatmapcells $preproc_pca_n_cells \
-                 --report_folder $report_folder \
+                 --report_folder $project_dir/report \
                  --experiment_name $experiment_name \
                  --resolution $preproc_resolution \
-                 --integrate $integrative_analysis
+                 --integrate $integrative_analysis \
+                 --preprocessing_library $project_dir/R/preprocessing_library.R
+}

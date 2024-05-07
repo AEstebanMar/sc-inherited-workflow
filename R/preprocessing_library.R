@@ -371,7 +371,7 @@ main_preprocessing_analysis <- function(name, experiment, input, output, filter,
               to   = getwd())
     file.remove(file.path(folder_name, paste0(experiment, ".", name, ".before.seu.RDS")))
   }
-
+}
 
 ##########################################################################
 
