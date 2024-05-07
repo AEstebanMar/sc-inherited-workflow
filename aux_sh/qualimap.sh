@@ -17,7 +17,7 @@
 
 hostname
 
-module load qualimap
+source ~soft_bio_267/initializes/init_qualimap
 project_dir=`pwd`
 mkdir -p $project_dir/report
 mkdir -p $project_dir/QMAP_RESULTS
