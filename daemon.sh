@@ -5,7 +5,6 @@ project_dir=`pwd`
 config_file=$project_dir/config_daemon
 module=$1
 launch_login=`grep launch_login $config_file | cut -f 2 -d " "`
-export PATH=$project_dir/reports:$PATH
 export PATH=$project_dir/scripts:$PATH
 export PATH=$project_dir/aux_sh:$PATH
 
