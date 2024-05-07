@@ -1,58 +1,30 @@
 #! /usr/bin/env Rscript
 
-# Sergio Alías, 20230707
-# Last modified 20230721
-
-
-######################################
-###   STAGE 2 SAMPLES COMPARISON   ###
-###   compare_samples.R            ###
-######################################
-
-#################
-### Libraries ###
-#################
-
-library(optparse)
-
-###################
-### Custom libs ###
-###################
 
 source("~aestebanm/projects/sc-inherited-workflow/R/qc_library.R")
 
-
-############
-### Args ###
-############
-
 option_list <- list(
-  make_option(c("-m", "--metrics"), type = "character",
-              help="Metrics file in wide format"),
-  make_option(c("-l", "--long_metrics"), type = "character",
-              help="Metrics file in long format"),
-  make_option(c("--cellranger_metrics"), type = "character",
-              help="Cell Ranger metrics file in wide format"),
-  make_option(c("--cellranger_long_metrics"), type = "character",
-              help="Cell Ranger Metrics file in long format"),
-  make_option(c("-o", "--output"), type = "character",
-              help="Output folder"),
-  make_option(c("-e", "--experiment_name"), type = "character",
-              help="Experiment name")
+  optparse::make_option(c("-m", "--metrics"), type = "character",
+    help="Metrics file in wide format"),
+  optparse::make_option(c("-l", "--long_metrics"), type = "character",
+    help="Metrics file in long format"),
+  optparse::make_option(c("--cellranger_metrics"), type = "character",
+    help="Cell Ranger metrics file in wide format"),
+  optparse::make_option(c("--cellranger_long_metrics"), type = "character",
+    help="Cell Ranger Metrics file in long format"),
+  optparse::make_option(c("-o", "--output"), type = "character",
+    help="Output folder"),
+  optparse::make_option(c("-e", "--experiment_name"), type = "character",
+    help="Experiment name"),
+  optparse::make_option(c("-t", "--template"), type = "character",
+    help="Template for report")
 )  
 
-opt <- parse_args(OptionParser(option_list = option_list))
-
-
-############
-### Main ###
-############
+opt <- optparse::parse_args(optparse::OptionParser(option_list = option_list))
 
 write_qc_report(name = "All samples",
                 experiment = opt$experiment_name,
-                template = file.path(root_path,
-                                     "templates",
-                                     "fastqc_report.Rmd"),
+                template = opt$template,
                 outdir = opt$output,
                 intermediate_files = "int_files",
                 metrics = opt$metrics,
